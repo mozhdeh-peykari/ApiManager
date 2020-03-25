@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
+//commit test
 namespace Sample.Controllers
 {
     [Route("api/[controller]")]
@@ -15,7 +15,7 @@ namespace Sample.Controllers
         [HttpGet]
         public string Get()
         {
-            return "Hi babe!";
+            return "Hello babe!";
         }
 
     }
