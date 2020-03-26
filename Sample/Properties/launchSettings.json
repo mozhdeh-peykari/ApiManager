@@ -17,7 +17,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Sample": {
+    "ApiManager": {
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/home",
