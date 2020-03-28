@@ -11,7 +11,12 @@ namespace ApiManager.Controllers
     [Route("api/[controller]")]
     public class HomeController : Controller
     {
-        // GET: api/<controller>
+        /// <summary>
+        /// Returns a specific text
+        /// </summary>
+        /// <returns>a string</returns>
+        /// <response code="200">Returns a specific text</response>
+
         [HttpGet]
         public string Get()
         {
