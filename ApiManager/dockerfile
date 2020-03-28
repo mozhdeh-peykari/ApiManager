@@ -1,8 +1,8 @@
-﻿FROM microsoft/dotnet
+﻿FROM mcr.microsoft.com/dotnet/core/aspnet:3.1
 MAINTAINER Chris Small for Packt
 
 RUN mkdir /app
-COPY ./bin/Release/netcoreapp2.1 /app
+COPY ./bin/Release/netcoreapp3.1 /app
 WORKDIR /app
 
 ENTRYPOINT ["dotnet", "/app/ApiManager.dll"]
