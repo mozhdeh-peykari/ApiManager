@@ -2,6 +2,7 @@
 using ApiManager.Extensions;
 using ApiManager.Services;
 using ApiManager.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -17,7 +18,6 @@ namespace ApiManager
         {
             Configuration = configuration;
             appSettings = configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
-
         }
 
         public IConfiguration Configuration { get; }
@@ -30,9 +30,11 @@ namespace ApiManager
             services.AddControllers();
             services.AddCustomSwagger();
             services.AddCustomJwt(appSettings.JwtSettings);
+            services.AddAutoMapper(typeof(Startup));
 
             //DI
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IJwtService, JwtService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

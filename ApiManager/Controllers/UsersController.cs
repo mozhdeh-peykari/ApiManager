@@ -1,6 +1,12 @@
-﻿using ApiManager.Services.Interfaces;
+﻿using ApiManager.Models;
+using ApiManager.Services.Interfaces;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace ApiManager.Controllers
 {
@@ -10,27 +16,30 @@ namespace ApiManager.Controllers
     public class UsersController : Controller
     {
         private readonly IUserService userService;
+        private readonly IJwtService jwtService;
+        private readonly IMapper mapper;
 
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService,IJwtService jwtService, IMapper mapper)
         {
             this.userService = userService;
+            this.jwtService = jwtService;
+            this.mapper = mapper;
         }
         /// <summary>
         /// Generates a JWT token for authentication
         /// </summary>
-        /// <param name="username">Username of the User</param>
-        /// <param name="password">Password of the User</param>
+        /// <param name="authenticateModel">User's Username and Password</param>
         /// <returns>a JWT token string</returns>
         /// <response code="200">Returns a JWT token</response>
-        /// <response code="400">Invalid Username or Password</response>
+        /// <response code="401">Invalid Username or Password</response>
         [AllowAnonymous]
-        [HttpGet("[action]")]
-        public IActionResult GetToken(string username, string password)
+        [HttpPost("[action]")]
+        public IActionResult GetToken([FromBody] AuthenticateModel authenticateModel)
         {
-            var user = userService.GetByUserAndPassword(username, password);
+            var user = userService.GetByUserAndPassword(authenticateModel.Username, authenticateModel.Password);
             if (user == null)
-                return BadRequest("Incorrect Username or Password");
-            var token = userService.GenerateToken(user);
+                return Unauthorized("Incorrect Username or Password");
+            var token = jwtService.GenerateToken(user);
             return Ok(token);
         }
         /// <summary>
@@ -42,7 +51,8 @@ namespace ApiManager.Controllers
         public IActionResult GetAll()
         {
             var users = userService.GetAll();
-            return Ok(users);
+            var userDtoList = mapper.Map<List<UserDto>>(users);
+            return Ok(userDtoList);
         }
     }
 }
