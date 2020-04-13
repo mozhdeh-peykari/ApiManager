@@ -7,6 +7,5 @@ namespace ApiManager.Services.Interfaces
     {
         IEnumerable<User> GetAll();
         User GetByUserAndPassword(string username, string password);
-        string GenerateToken(User user);
     }
 }
