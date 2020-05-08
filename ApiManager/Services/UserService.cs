@@ -2,6 +2,7 @@
 using ApiManager.Entities;
 using ApiManager.Extensions;
 using ApiManager.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -17,17 +18,18 @@ namespace ApiManager.Services
 {
     public class UserService : IUserService
     {
-        public List<User> users = new List<User> {
-                new User { Id = 1, Username="mojpey",Password="123",FirstName="Mozhdeh",LastName="Peykari"},
-                new User { Id = 2, Username = "na3rfaraji", Password = "456", FirstName = "Nasser", LastName = "Faraji" }
-                };
-        public IEnumerable<User> GetAll()
+        private readonly ApplicationDbContext _context;
+        public UserService(ApplicationDbContext context)
         {
-            return users;
+            _context = context;
         }
-        public User GetByUserAndPassword(string username, string password)
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var user = users.SingleOrDefault(u => u.Username == username && u.Password == password);
+            return await _context.Users.ToListAsync();
+        }
+        public async Task<User> GetByUserAndPasswordAsync(string username, string password)
+        {
+            var user = await _context.Users.SingleOrDefaultAsync(u => u.Username == username && u.Password == password);
 
             if (user == null)
                 return null;

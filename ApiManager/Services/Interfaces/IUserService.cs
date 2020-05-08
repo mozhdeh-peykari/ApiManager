@@ -1,11 +1,12 @@
 ﻿using ApiManager.Entities;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ApiManager.Services.Interfaces
 {
     public interface IUserService
     {
-        IEnumerable<User> GetAll();
-        User GetByUserAndPassword(string username, string password);
+        Task<IEnumerable<User>> GetAllAsync();
+        Task<User> GetByUserAndPasswordAsync(string username, string password);
     }
 }

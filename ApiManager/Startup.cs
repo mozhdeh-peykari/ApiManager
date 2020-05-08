@@ -1,10 +1,12 @@
 ﻿using ApiManager.Common;
+using ApiManager.Entities;
 using ApiManager.Extensions;
 using ApiManager.Services;
 using ApiManager.Services.Interfaces;
 using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,8 +27,10 @@ namespace ApiManager
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
+            services.AddDbContext<ApplicationDbContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.Configure<AppSettings>(Configuration.GetSection(nameof(AppSettings)));
             services.AddControllers();
             services.AddCustomSwagger();
             services.AddCustomJwt(appSettings.JwtSettings);
