@@ -34,9 +34,9 @@ namespace ApiManager.Controllers
         /// <response code="401">Invalid Username or Password</response>
         [AllowAnonymous]
         [HttpPost("[action]")]
-        public IActionResult GetToken([FromBody] AuthenticateModel authenticateModel)
+        public async Task<IActionResult> GetToken([FromBody] AuthenticateModel authenticateModel)
         {
-            var user = userService.GetByUserAndPassword(authenticateModel.Username, authenticateModel.Password);
+            var user = await userService.GetByUserAndPasswordAsync(authenticateModel.Username, authenticateModel.Password);
             if (user == null)
                 return Unauthorized("Incorrect Username or Password");
             var token = jwtService.GenerateToken(user);
@@ -48,9 +48,9 @@ namespace ApiManager.Controllers
         /// <returns>List of all users</returns>
         /// <response code="200">Returns a list of all users</response>
         [HttpGet]
-        public IActionResult GetAll()
+        public async Task<IActionResult> GetAll()
         {
-            var users = userService.GetAll();
+            var users = await userService.GetAllAsync();
             var userDtoList = mapper.Map<List<UserDto>>(users);
             return Ok(userDtoList);
         }
